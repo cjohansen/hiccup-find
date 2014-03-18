@@ -13,7 +13,7 @@ Add this to your project.clj:
 ## Usage
 
 ```clj
-(fact (hiccup-find :p.image
+(fact (hiccup-find [:p.image]
                    [:html
                     [:body
                      [:p.img "No"]

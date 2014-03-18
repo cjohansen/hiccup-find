@@ -32,8 +32,13 @@ turns into
                (set (split-hiccup-symbol symbol))))
 
 (defn hiccup-find
-  "Return the node from the hiccup document matching the query, if any"
-  [q root]
-  (->> root
-       (hiccup-nodes)
-       (filter #(hiccup-symbol-matches? q (first %)))))
+  "Return the node from the hiccup document matching the query, if any.
+   The query is a vector of hiccup symbols; keywords naming tag names, classes
+   and ids (either one or a combination) like :tag.class.class2#id"
+  [query root]
+  (if (and (seq root) (seq query))
+    (recur (rest query)
+           (->> root
+                (hiccup-nodes)
+                (filter #(hiccup-symbol-matches? (first query) (first %)))))
+    root))

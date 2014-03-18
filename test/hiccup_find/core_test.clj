@@ -7,7 +7,7 @@
       (hiccup-symbol-matches? :.class :p.class.more) => true
       (hiccup-symbol-matches? :p.more.class :p.class.more) => true)
 
-(fact (hiccup-find :p.image
+(fact (hiccup-find [:p.image]
                    [:html
                     [:body
                      [:p.img "No"]
@@ -17,3 +17,36 @@
                       [:p.image "Yes 2"]]]])
       => (list [:p.image "Yes 1"]
                [:p.image "Yes 2"]))
+
+(fact (hiccup-find [:div :p]
+                   [:html
+                    [:body
+                     [:p "No"]
+                     [:div [:p "Yes 1"]]
+                     [:div
+                      [:table
+                       [:tr
+                        [:td
+                         [:p "Yes 2"]]]]]]])
+      => (list [:p "Yes 1"]
+               [:p "Yes 2"]))
+
+(fact (hiccup-find [:div :p]
+                   [:html
+                    [:body
+                     [:div
+                      [:table
+                       [:tr
+                        [:td
+                         [:p "Yes 1"]]]]]
+                     [:div
+                      [:table
+                       [:tr
+                        [:td
+                         [:p "Yes 2"]]]
+                       [:tr
+                        [:td
+                         [:p "Yes 3"]]]]]]])
+      => (list [:p "Yes 1"]
+               [:p "Yes 2"]
+               [:p "Yes 3"]))
