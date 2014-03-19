@@ -1,6 +1,6 @@
-(defproject hiccup-find "0.1.0"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject hiccup-find "0.2.1"
+  :description "Hiccup tree inspection for tests"
+  :url "http://github.com/cjohansen/hiccup-find"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]]
