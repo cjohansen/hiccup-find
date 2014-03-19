@@ -1,5 +1,10 @@
 (ns hiccup-find.core
-  (:require [clojure.set :as set]))
+  (:require [clojure.set :as set]
+            [clojure.string :as str]
+            [clojure.walk :refer [postwalk]]))
+
+(defn hiccup-tree [tree]
+  (tree-seq #(or (vector? %) (seq? %)) seq tree))
 
 (defn hiccup-nodes
   "Takes a hiccup tree and returns a list of all the nodes in it.
@@ -17,7 +22,7 @@ turns into
  [:p \"There\"])"
   [root]
   (->> root
-       (tree-seq #(or (vector? %) (seq? %)) seq)
+       hiccup-tree
        (filter vector?)))
 
 (defn split-hiccup-symbol
@@ -42,3 +47,20 @@ turns into
                 (hiccup-nodes)
                 (filter #(hiccup-symbol-matches? (first query) (first %)))))
     root))
+
+(def inline-elements
+  #{:b :big :i :small :tt :abbr :acronym :cite :code :dfn :em :kbd
+    :strong :samp :var :a :bdo :br :img :map :object :q :script
+    :span :sub :sup :button :input :label :select :textarea})
+
+(defn inline? [node]
+  (and (vector? node) (contains? inline-elements (first node))))
+
+(defn hiccup-text [tree]
+  (->> (hiccup-tree tree)
+       (reduce (fn [text node]
+                 (cond
+                  (inline? node) text
+                  (vector? node) (str/replace text #"(.+)\n?$" #(str (second %1) "\n"))
+                  (string? node) (str text node)
+                  :else text)) "")))

@@ -50,3 +50,21 @@
       => (list [:p "Yes 1"]
                [:p "Yes 2"]
                [:p "Yes 3"]))
+
+(fact (hiccup-text [:p "Text here"])
+      => "Text here")
+
+(fact (hiccup-text [:p [:span "Text here"]])
+      => "Text here")
+
+(fact (hiccup-text [:p {:class "something"} "Text here"])
+      => "Text here")
+
+(fact (hiccup-text [:p {:class "something"} "Text " [:strong "here"]])
+      => "Text here")
+
+(fact (hiccup-text [:html
+                    [:body
+                     [:h1 "Welcome, earthling"]
+                     [:p "Hope you " [:strong "enjoy"] " your stay"]]]) => (str "Welcome, earthling\n"
+                                                                                "Hope you enjoy your stay"))
