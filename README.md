@@ -7,7 +7,7 @@ Utilities to help you test hiccup-markup generating functions.
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "0.3.0"]
+[hiccup-find  "0.4.0"]
 ```
 
 ## Queries
@@ -82,6 +82,11 @@ asserting on the text content is good enough.
 ```
 
 `hiccup-text` appends a newline after each block element.
+
+For a textual representation that reveals even fewer details about the
+underlying structure, try `hiccup-string`. It works just like `hiccup-text`,
+except it returns a string with newlines replaced by space characters, and all
+consecutive spaces condensed to one.
 
 ## License
 
