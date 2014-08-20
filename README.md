@@ -7,7 +7,7 @@ Utilities to help you test hiccup-markup generating functions.
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "0.1.0"]
+[hiccup-find  "0.3.0"]
 ```
 
 ## Queries
@@ -15,6 +15,9 @@ Add this to your project.clj:
 Find nodes matching a query:
 
 ```clj
+(ns my.stuff-test
+  (:require [hiccup-find.core :refer :all]))
+
 (fact (hiccup-find [:p.image]
                    [:html
                     [:body
