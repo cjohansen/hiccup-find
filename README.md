@@ -27,8 +27,7 @@ Find nodes matching a query:
                [:p.image "Yes 2"]))
 ```
 
-Queries are simple, and support tag names, classes, ids and parent/child
-relationships.
+Queries are support tag names, classes, ids and parent/child relationships.
 
 ### Tag name
 
@@ -69,7 +68,7 @@ relationships.
 
 To avoid having tests become overly coupled to details in the markup (such as
 OOCSS classes, which basically couple markup with visual appearance), sometimes
-assering on the text content is good enough.
+asserting on the text content is good enough.
 
 ```clj
 (hiccup-text [:html
