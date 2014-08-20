@@ -63,4 +63,5 @@ turns into
                   (inline? node) text
                   (vector? node) (str/replace text #"(.+)\n?$" #(str (second %1) "\n"))
                   (string? node) (str text node)
+                  (number? node) (str text node)
                   :else text)) "")))

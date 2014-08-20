@@ -68,3 +68,7 @@
                      [:h1 "Welcome, earthling"]
                      [:p "Hope you " [:strong "enjoy"] " your stay"]]]) => (str "Welcome, earthling\n"
                                                                                 "Hope you enjoy your stay"))
+
+(fact (hiccup-text [:html
+                    [:body
+                     [:p "Number " [:strong 42]]]]) => "Number 42")

@@ -1,4 +1,4 @@
-(defproject hiccup-find "0.3.0"
+(defproject hiccup-find "0.3.1"
   :description "Hiccup tree inspection for tests"
   :url "http://github.com/cjohansen/hiccup-find"
   :license {:name "Eclipse Public License"
