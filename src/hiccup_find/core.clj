@@ -56,7 +56,10 @@ turns into
 (defn inline? [node]
   (and (vector? node) (contains? inline-elements (first node))))
 
-(defn hiccup-text [tree]
+(defn hiccup-text
+  "Return only text from the hiccup structure; remove
+   all tags and attributes"
+  [tree]
   (->> (hiccup-tree tree)
        (reduce (fn [text node]
                  (cond
@@ -65,3 +68,12 @@ turns into
                   (string? node) (str text node)
                   (number? node) (str text node)
                   :else text)) "")))
+
+(defn hiccup-string
+  "Return the hiccup-text as a one-line string; removes newlines and collapses
+   multiple spaces."
+  [tree]
+  (-> tree
+      hiccup-text
+      (str/replace #"\n" " ")
+      (str/replace #"\s+" " ")))

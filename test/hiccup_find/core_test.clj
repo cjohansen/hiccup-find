@@ -72,3 +72,13 @@
 (fact (hiccup-text [:html
                     [:body
                      [:p "Number " [:strong 42]]]]) => "Number 42")
+
+(fact (hiccup-string [:html
+                      [:body
+                       [:h1 "Welcome, earthling"]
+                       [:p "Hope you " [:strong "enjoy"] " your stay"]]]) => "Welcome, earthling Hope you enjoy your stay")
+
+(fact (hiccup-string [:html
+                      [:body
+                       [:h1 "Welcome!"]
+                       [:p "Hope you   " [:strong "enjoy"] " your stay"]]]) => "Welcome! Hope you enjoy your stay")
