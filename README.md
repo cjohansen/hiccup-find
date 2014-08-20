@@ -30,7 +30,7 @@ Find nodes matching a query:
                [:p.image "Yes 2"]))
 ```
 
-Queries are support tag names, classes, ids and parent/child relationships.
+Queries support tag names, classes, ids and parent/child relationships.
 
 ### Tag name
 
