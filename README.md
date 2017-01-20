@@ -7,7 +7,7 @@ Utilities to help you test hiccup-markup generating functions.
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "0.4.0"]
+[hiccup-find  "0.4.1"]
 ```
 
 ## Queries
@@ -87,6 +87,15 @@ For a textual representation that reveals even fewer details about the
 underlying structure, try `hiccup-string`. It works just like `hiccup-text`,
 except it returns a string with newlines replaced by space characters, and all
 consecutive spaces condensed to one.
+
+## Testing
+
+Test hiccup-find in Clojure and ClojureScript with
+
+    lein test-all
+
+[PhantomJS](http://phantomjs.org/) is a prerequisite, since that's where the
+ClojureScript tests are run.
 
 ## License
 
