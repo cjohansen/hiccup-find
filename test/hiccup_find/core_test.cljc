@@ -1,6 +1,10 @@
 (ns hiccup-find.core-test
-  (:require [clojure.test :refer :all]
-            [hiccup-find.core :refer :all]))
+  (:require #?(:cljs [cljs.test :refer-macros [deftest is testing run-tests]]
+               :clj [clojure.test :refer :all])
+            [hiccup-find.core :refer [hiccup-find
+                                      hiccup-string
+                                      hiccup-symbol-matches?
+                                      hiccup-text]]))
 
 (deftest test-hiccup-symbol-matches?
   (is (hiccup-symbol-matches? :p :p.class))
