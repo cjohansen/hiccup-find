@@ -1,84 +1,92 @@
 (ns hiccup-find.core-test
-  (:require [midje.sweet :refer :all]
+  (:require [clojure.test :refer :all]
             [hiccup-find.core :refer :all]))
 
-(fact (hiccup-symbol-matches? :p :p.class) => true
-      (hiccup-symbol-matches? :p.class :p) => false
-      (hiccup-symbol-matches? :.class :p.class.more) => true
-      (hiccup-symbol-matches? :p.more.class :p.class.more) => true)
+(deftest test-hiccup-symbol-matches?
+  (is (hiccup-symbol-matches? :p :p.class))
+  (is (not (hiccup-symbol-matches? :p.class :p)))
+  (is (hiccup-symbol-matches? :.class :p.class.more))
+  (is (hiccup-symbol-matches? :p.more.class :p.class.more)))
 
-(fact (hiccup-find [:p.image]
-                   [:html
-                    [:body
-                     [:p.img "No"]
-                     [:p.image "Yes 1"]
-                     [:p.images "No"]
-                     [:div.image
-                      [:p.image "Yes 2"]]]])
-      => (list [:p.image "Yes 1"]
-               [:p.image "Yes 2"]))
+(deftest test-hiccup-find
 
-(fact (hiccup-find [:div :p]
-                   [:html
-                    [:body
-                     [:p "No"]
-                     [:div [:p "Yes 1"]]
-                     [:div
-                      [:table
-                       [:tr
-                        [:td
-                         [:p "Yes 2"]]]]]]])
-      => (list [:p "Yes 1"]
-               [:p "Yes 2"]))
+  (is (= (list [:p.image "Yes 1"]
+               [:p.image "Yes 2"])
+         (hiccup-find [:p.image]
+                      [:html
+                       [:body
+                        [:p.img "No"]
+                        [:p.image "Yes 1"]
+                        [:p.images "No"]
+                        [:div.image
+                         [:p.image "Yes 2"]]]])))
 
-(fact (hiccup-find [:div :p]
-                   [:html
-                    [:body
-                     [:div
-                      [:table
-                       [:tr
-                        [:td
-                         [:p "Yes 1"]]]]]
-                     [:div
-                      [:table
-                       [:tr
-                        [:td
-                         [:p "Yes 2"]]]
-                       [:tr
-                        [:td
-                         [:p "Yes 3"]]]]]]])
-      => (list [:p "Yes 1"]
+  (is (= (list [:p "Yes 1"]
+               [:p "Yes 2"])
+         (hiccup-find [:div :p]
+                      [:html
+                       [:body
+                        [:p "No"]
+                        [:div [:p "Yes 1"]]
+                        [:div
+                         [:table
+                          [:tr
+                           [:td
+                            [:p "Yes 2"]]]]]]])))
+
+  (is (= (list [:p "Yes 1"]
                [:p "Yes 2"]
-               [:p "Yes 3"]))
+               [:p "Yes 3"])
+         (hiccup-find [:div :p]
+                      [:html
+                       [:body
+                        [:div
+                         [:table
+                          [:tr
+                           [:td
+                            [:p "Yes 1"]]]]]
+                        [:div
+                         [:table
+                          [:tr
+                           [:td
+                            [:p "Yes 2"]]]
+                          [:tr
+                           [:td
+                            [:p "Yes 3"]]]]]]]))))
 
-(fact (hiccup-text [:p "Text here"])
-      => "Text here")
+(deftest test-hiccup-text
+  (is (= "Text here"
+         (hiccup-text [:p "Text here"])))
 
-(fact (hiccup-text [:p [:span "Text here"]])
-      => "Text here")
+  (is (= "Text here"
+         (hiccup-text [:p [:span "Text here"]])))
 
-(fact (hiccup-text [:p {:class "something"} "Text here"])
-      => "Text here")
+  (is (= "Text here"
+         (hiccup-text [:p {:class "something"} "Text here"])))
 
-(fact (hiccup-text [:p {:class "something"} "Text " [:strong "here"]])
-      => "Text here")
+  (is (= "Text here"
+         (hiccup-text [:p {:class "something"} "Text " [:strong "here"]])))
 
-(fact (hiccup-text [:html
-                    [:body
-                     [:h1 "Welcome, earthling"]
-                     [:p "Hope you " [:strong "enjoy"] " your stay"]]]) => (str "Welcome, earthling\n"
-                                                                                "Hope you enjoy your stay"))
+  (is (= (str "Welcome, earthling\n"
+              "Hope you enjoy your stay")
+         (hiccup-text [:html
+                       [:body
+                        [:h1 "Welcome, earthling"]
+                        [:p "Hope you " [:strong "enjoy"] " your stay"]]])))
 
-(fact (hiccup-text [:html
-                    [:body
-                     [:p "Number " [:strong 42]]]]) => "Number 42")
+  (is (= "Number 42"
+         (hiccup-text [:html
+                       [:body
+                        [:p "Number " [:strong 42]]]]))))
+(deftest test-hiccup-string
+  (is (= "Welcome, earthling Hope you enjoy your stay"
+         (hiccup-string [:html
+                         [:body
+                          [:h1 "Welcome, earthling"]
+                          [:p "Hope you " [:strong "enjoy"] " your stay"]]])))
 
-(fact (hiccup-string [:html
-                      [:body
-                       [:h1 "Welcome, earthling"]
-                       [:p "Hope you " [:strong "enjoy"] " your stay"]]]) => "Welcome, earthling Hope you enjoy your stay")
-
-(fact (hiccup-string [:html
-                      [:body
-                       [:h1 "Welcome!"]
-                       [:p "Hope you   " [:strong "enjoy"] " your stay"]]]) => "Welcome! Hope you enjoy your stay")
+  (is (= "Welcome! Hope you enjoy your stay"
+         (hiccup-string [:html
+                         [:body
+                          [:h1 "Welcome!"]
+                          [:p "Hope you   " [:strong "enjoy"] " your stay"]]]))))
