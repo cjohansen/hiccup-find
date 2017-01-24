@@ -1,4 +1,4 @@
-(defproject hiccup-find "0.4.1"
+(defproject hiccup-find "0.5.0"
   :description "Hiccup tree inspection for tests"
 
   :url "http://github.com/cjohansen/hiccup-find"

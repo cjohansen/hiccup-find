@@ -7,7 +7,7 @@ Utilities to help you test hiccup-markup generating functions.
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "0.4.1"]
+[hiccup-find  "0.5.0"]
 ```
 
 ## Queries
