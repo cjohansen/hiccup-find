@@ -81,7 +81,25 @@
                             [:p "Yes 2"]]]
                           [:tr
                            [:td
-                            [:p "Yes 3"]]]]]]]))))
+                            [:p "Yes 3"]]]]]]])))
+
+  (is (= (list [:input {:name "a" :value 1}])
+         (hiccup-find [:input {:name "a"}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]])))
+
+  (is (= (list [:input {:name "b" :value 2}])
+         (hiccup-find [:input {:value even?}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]]))))
 
 (deftest test-hiccup-text
   (is (= "Text here"

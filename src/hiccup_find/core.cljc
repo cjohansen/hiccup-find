@@ -101,6 +101,11 @@ turns into
                 (matcher (get attrs attribute))
                 (= matcher (get attrs attribute)))))))
 
+(defn node-matcher [q node]
+  (if (map? q)
+    (hiccup-attribute-matches? q node)
+    (hiccup-symbol-matches? q (normalized-symbol node))))
+
 (defn hiccup-find
   "Return the node from the hiccup document matching the query, if any.
    The query is a vector of hiccup symbols; keywords naming tag names, classes
@@ -110,7 +115,7 @@ turns into
     (recur (rest query)
            (->> root
                 (hiccup-nodes)
-                (filter #(hiccup-symbol-matches? (first query) (normalized-symbol %)))))
+                (filter (partial node-matcher (first query)))))
     root))
 
 (def inline-elements
