@@ -37,6 +37,7 @@ turns into
   [node]
   (let [attrs (when (map? (second node)) (second node))]
     {:id (:id attrs)
+     :attrs attrs
      :classes (re-seq #"[^ ]+" (:class attrs ""))}))
 
 (defn hiccup-symbol-parts
@@ -48,7 +49,22 @@ turns into
         classes (map #(subs % 1) (filter #(str/starts-with? % ".") coll))]
     {:tag (subs tag 1)
      :id (when id (subs id 1))
+     :attrs {:id (when id (subs id 1)) :class (str/join " " classes)}
      :classes classes}))
+
+(defn merge-attrs
+  "Merge two attribute maps with special joining of :class"
+  [a1 a2]
+  (assoc (merge a1 a2)
+         :class (s/trim (str (:class a1) " " (:class a2)))))
+
+(defn hiccup-attrs
+  "Returns attributes both from the symbol as well as attributes of the node"
+  [node]
+  (when node
+    (-> (merge-attrs
+         (:attrs (hiccup-symbol-parts node))
+         (:attrs (hiccup-attrs-parts node))))))
 
 (defn normalized-symbol
   "Takes a node and returns the tag symbol with classes and id
@@ -77,6 +93,19 @@ turns into
   (set/subset? (set (split-hiccup-symbol q))
                (set (split-hiccup-symbol symbol))))
 
+(defn hiccup-attribute-matches? [q node]
+  (let [attrs (hiccup-attrs node)]
+    (every? true?
+            (for [[attribute matcher] q]
+              (if (fn? matcher)
+                (matcher (get attrs attribute))
+                (= matcher (get attrs attribute)))))))
+
+(defn node-matcher [q node]
+  (if (map? q)
+    (hiccup-attribute-matches? q node)
+    (hiccup-symbol-matches? q (normalized-symbol node))))
+
 (defn hiccup-find
   "Return the node from the hiccup document matching the query, if any.
    The query is a vector of hiccup symbols; keywords naming tag names, classes
@@ -86,7 +115,7 @@ turns into
     (recur (rest query)
            (->> root
                 (hiccup-nodes)
-                (filter #(hiccup-symbol-matches? (first query) (normalized-symbol %)))))
+                (filter (partial node-matcher (first query)))))
     root))
 
 (def inline-elements

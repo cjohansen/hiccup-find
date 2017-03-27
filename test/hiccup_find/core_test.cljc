@@ -7,6 +7,7 @@
                                       hiccup-text
                                       hiccup-attrs-parts
                                       hiccup-symbol-parts
+                                      hiccup-attrs
                                       normalized-symbol]]))
 
 (deftest test-hiccup-symbol-matches?
@@ -16,12 +17,19 @@
   (is (hiccup-symbol-matches? :p.more.class :p.class.more)))
 
 (deftest test-hiccup-attrs-parts []
-  (is (= {:id "quux" :classes ["foo" "bar"]}
+  (is (= {:id "quux" :classes ["foo" "bar"] :attrs {:id "quux" :class "foo bar"}}
          (hiccup-attrs-parts [:div.x.y#z {:id "quux" :class "foo bar"}]))))
 
 (deftest test-hiccup-symbol-parts []
-  (is (= {:tag "div" :id "quux" :classes ["foo" "bar"]}
+  (is (= {:tag "div" :id "quux" :classes ["foo" "bar"] :attrs {:id "quux" :class "foo bar"}}
          (hiccup-symbol-parts [:div.foo.bar#quux]))))
+
+(deftest test-hiccup-attrs []
+  (is (= {:id "quux"
+          :class "foo bar"
+          :name "n"
+          :value 42}
+         (hiccup-attrs [:input.foo#quux {:name "n" :class "bar" :value 42}]))))
 
 (deftest test-normalized-symbol
   (is (= :div.foo.bar#quux (normalized-symbol [:div.foo.bar#quux])))
@@ -73,7 +81,25 @@
                             [:p "Yes 2"]]]
                           [:tr
                            [:td
-                            [:p "Yes 3"]]]]]]]))))
+                            [:p "Yes 3"]]]]]]])))
+
+  (is (= (list [:input {:name "a" :value 1}])
+         (hiccup-find [:input {:name "a"}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]])))
+
+  (is (= (list [:input {:name "b" :value 2}])
+         (hiccup-find [:input {:value even?}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]]))))
 
 (deftest test-hiccup-text
   (is (= "Text here"
