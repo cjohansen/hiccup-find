@@ -4,13 +4,44 @@
             [hiccup-find.core :refer [hiccup-find
                                       hiccup-string
                                       hiccup-symbol-matches?
-                                      hiccup-text]]))
+                                      hiccup-text
+                                      hiccup-attrs-parts
+                                      hiccup-symbol-parts
+                                      hiccup-attrs
+                                      normalized-symbol]]))
 
 (deftest test-hiccup-symbol-matches?
   (is (hiccup-symbol-matches? :p :p.class))
   (is (not (hiccup-symbol-matches? :p.class :p)))
   (is (hiccup-symbol-matches? :.class :p.class.more))
   (is (hiccup-symbol-matches? :p.more.class :p.class.more)))
+
+(deftest test-hiccup-attrs-parts []
+  (is (= {:id "quux" :classes ["foo" "bar"] :attrs {:id "quux" :class "foo bar"}}
+         (hiccup-attrs-parts [:div.x.y#z {:id "quux" :class "foo bar"}]))))
+
+(deftest test-hiccup-symbol-parts []
+  (is (= {:tag "div" :id "quux" :classes ["foo" "bar"] :attrs {:id "quux" :class "foo bar"}}
+         (hiccup-symbol-parts [:div.foo.bar#quux]))))
+
+(deftest test-hiccup-attrs []
+  (is (= {:id "quux"
+          :class "foo bar"
+          :name "n"
+          :value 42}
+         (hiccup-attrs [:input.foo#quux {:name "n" :class "bar" :value 42}])))
+  (is (= {:id nil
+          :class "foo bar"
+          :name "n"
+          :value 42}
+         (hiccup-attrs [:input.foo#quux.bar {:id nil :name "n" :class nil :value 42}]))
+      "id overrides but class doesn't"))
+
+(deftest test-normalized-symbol
+  (is (= :div.foo.bar#quux (normalized-symbol [:div.foo.bar#quux])))
+  (is (= :div.foo.bar#quux (normalized-symbol [:div.foo#quux {:class "bar"}])))
+  (is (= :div.foo.bar#quux (normalized-symbol [:div.foo {:class "bar" :id "quux"}])))
+  (is (= :div.foo.bar#quux (normalized-symbol [:div {:class "foo bar" :id "quux"}]))))
 
 (deftest test-hiccup-find
 
@@ -56,7 +87,25 @@
                             [:p "Yes 2"]]]
                           [:tr
                            [:td
-                            [:p "Yes 3"]]]]]]]))))
+                            [:p "Yes 3"]]]]]]])))
+
+  (is (= (list [:input {:name "a" :value 1}])
+         (hiccup-find [:input {:name "a"}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]])))
+
+  (is (= (list [:input {:name "b" :value 2}])
+         (hiccup-find [:input {:value even?}]
+                      [:html
+                       [:body
+                        [:div
+                         [:form
+                          [:input {:name "a" :value 1}]
+                          [:input {:name "b" :value 2}]]]]]))))
 
 (deftest test-hiccup-text
   (is (= "Text here"

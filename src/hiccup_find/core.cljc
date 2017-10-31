@@ -1,7 +1,9 @@
 (ns hiccup-find.core
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [clojure.walk :refer [postwalk]]))
+            [clojure.set :refer [union]]
+            [clojure.walk :refer [postwalk]]
+            [clojure.string :as s]))
 
 (defn hiccup-tree [tree]
   (tree-seq #(or (vector? %) (seq? %)) seq tree))
@@ -30,11 +32,79 @@ turns into
   [symbol]
   (re-seq #"[:.#][^:.#]+" (str symbol)))
 
+(defn hiccup-attrs-parts
+  "Extracts the id and classes from the attributes of the given node."
+  [node]
+  (let [attrs (when (map? (second node)) (second node))]
+    {:id (:id attrs)
+     :attrs attrs
+     :classes (when (:class attrs) (re-seq #"[^ ]+" (:class attrs)))}))
+
+(defn hiccup-symbol-parts
+  "Extracts the tag, id and classes from the symbol of the given node."
+  [node]
+  (let [coll (split-hiccup-symbol (first node))
+        tag (first coll)
+        id (first (filter #(str/starts-with? % "#") coll))
+        classes (map #(subs % 1) (filter #(str/starts-with? % ".") coll))]
+    {:tag (subs tag 1)
+     :id (when id (subs id 1))
+     :attrs {:id (when id (subs id 1)) :class (str/join " " classes)}
+     :classes classes}))
+
+(defn merge-attrs
+  "Merge two attribute maps with special joining of :class"
+  [a1 a2]
+  (assoc (merge a1 a2)
+         :class (s/trim (str (:class a1) " " (:class a2)))))
+
+(defn hiccup-attrs
+  "Returns attributes both from the symbol as well as attributes of the node"
+  [node]
+  (when node
+    (-> (merge-attrs
+         (:attrs (hiccup-symbol-parts node))
+         (:attrs (hiccup-attrs-parts node))))))
+
+(defn normalized-symbol
+  "Takes a node and returns the tag symbol with classes and id
+  calculated both from the tag classes and id as well as ones
+  found from the attributes map.
+
+  (normalized-symbol [:div.foo {:class \"bar\" :id \"quux\"}])
+
+  returns
+
+  :div.foo.bar#quux"
+  [node]
+  (let [from-attrs (hiccup-attrs-parts node)
+        from-symbol (hiccup-symbol-parts node)
+        tag (:tag from-symbol) ; not present in attrs
+        id (or (:id from-attrs) (:id from-symbol)) ; prefer attributes
+        classes (union (set (:classes from-attrs))
+                       (set (:classes from-symbol)))]
+    (keyword (str tag
+                  (when classes (str "." (str/join "." classes)))
+                  (when id (str "#" id))))))
+
 (defn hiccup-symbol-matches?
   "Determine if a query matches a single hiccup node symbol"
   [q symbol]
   (set/subset? (set (split-hiccup-symbol q))
                (set (split-hiccup-symbol symbol))))
+
+(defn hiccup-attribute-matches? [q node]
+  (let [attrs (hiccup-attrs node)]
+    (every? true?
+            (for [[attribute matcher] q]
+              (if (fn? matcher)
+                (matcher (get attrs attribute))
+                (= matcher (get attrs attribute)))))))
+
+(defn node-matcher [q node]
+  (if (map? q)
+    (hiccup-attribute-matches? q node)
+    (hiccup-symbol-matches? q (normalized-symbol node))))
 
 (defn hiccup-find
   "Return the node from the hiccup document matching the query, if any.
@@ -45,7 +115,7 @@ turns into
     (recur (rest query)
            (->> root
                 (hiccup-nodes)
-                (filter #(hiccup-symbol-matches? (first query) (first %)))))
+                (filter (partial node-matcher (first query)))))
     root))
 
 (def inline-elements
