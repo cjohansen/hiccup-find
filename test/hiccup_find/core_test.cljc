@@ -29,7 +29,13 @@
           :class "foo bar"
           :name "n"
           :value 42}
-         (hiccup-attrs [:input.foo#quux {:name "n" :class "bar" :value 42}]))))
+         (hiccup-attrs [:input.foo#quux {:name "n" :class "bar" :value 42}])))
+  (is (= {:id nil
+          :class "foo bar"
+          :name "n"
+          :value 42}
+         (hiccup-attrs [:input.foo#quux.bar {:id nil :name "n" :class nil :value 42}]))
+      "id overrides but class doesn't"))
 
 (deftest test-normalized-symbol
   (is (= :div.foo.bar#quux (normalized-symbol [:div.foo.bar#quux])))

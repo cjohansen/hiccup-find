@@ -38,7 +38,7 @@ turns into
   (let [attrs (when (map? (second node)) (second node))]
     {:id (:id attrs)
      :attrs attrs
-     :classes (re-seq #"[^ ]+" (:class attrs ""))}))
+     :classes (when (:class attrs) (re-seq #"[^ ]+" (:class attrs)))}))
 
 (defn hiccup-symbol-parts
   "Extracts the tag, id and classes from the symbol of the given node."
