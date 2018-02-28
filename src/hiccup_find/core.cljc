@@ -30,11 +30,25 @@ turns into
   [symbol]
   (re-seq #"[:.#][^:.#]+" (str symbol)))
 
+(defn split-hiccup-form [form]
+  (if (map? (second form))
+    (concat (split-hiccup-symbol (first form))
+            (when-let [class (-> form second :class)]
+              (map #(str "." %) (str/split class #" ")))
+            [(str "#" (-> form second :id))])
+    (split-hiccup-symbol (first form))))
+
 (defn hiccup-symbol-matches?
   "Determine if a query matches a single hiccup node symbol"
   [q symbol]
   (set/subset? (set (split-hiccup-symbol q))
                (set (split-hiccup-symbol symbol))))
+
+(defn hiccup-form-matches?
+  "Determine if a query matches a single hiccup node symbol"
+  [q form]
+  (set/subset? (set (split-hiccup-symbol q))
+               (into #{} (split-hiccup-form form))))
 
 (defn hiccup-find
   "Return the node from the hiccup document matching the query, if any.
@@ -43,9 +57,8 @@ turns into
   [query root]
   (if (and (seq root) (seq query))
     (recur (rest query)
-           (->> root
-                (hiccup-nodes)
-                (filter #(hiccup-symbol-matches? (first query) (first %)))))
+           (->> (hiccup-nodes root)
+                (filter #(hiccup-form-matches? (first query) %))))
     root))
 
 (def inline-elements
