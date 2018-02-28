@@ -1,13 +1,13 @@
 # hiccup-find
 
-Utilities to help you test hiccup-markup generating functions.
+Very rudimentary querying of hiccup documents.
 
 ## Installation
 
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "0.5.0"]
+[hiccup-find  "1.0.0"]
 ```
 
 ## Queries
@@ -16,9 +16,9 @@ Find nodes matching a query:
 
 ```clj
 (ns my.stuff-test
-  (:require [hiccup-find.core :refer :all]))
+  (:require [hiccup-find.core :as hf]))
 
-(fact (hiccup-find [:p.image]
+(fact (hf/hiccup-find [:p.image]
                    [:html
                     [:body
                      [:p.img "No"]
@@ -31,12 +31,6 @@ Find nodes matching a query:
 ```
 
 Queries support tag names, classes, ids and parent/child relationships.
-
-### Tag name
-
-```clj
-[:h1]
-```
 
 ### Tag name
 
@@ -74,10 +68,10 @@ OOCSS classes, which basically couple markup with visual appearance), sometimes
 asserting on the text content is good enough.
 
 ```clj
-(hiccup-text [:html
-               [:body
-                [:h1 "Welcome, earthling"]
-                [:p "Hope you " [:strong "enjoy"] " your stay"]]])
+(hf/hiccup-text [:html
+                 [:body
+                  [:h1 "Welcome, earthling"]
+                  [:p "Hope you " [:strong "enjoy"] " your stay"]]])
 ;; => "Welcome, earthling\nHope you enjoy your stay\n")
 ```
 
@@ -92,14 +86,16 @@ consecutive spaces condensed to one.
 
 Test hiccup-find in Clojure and ClojureScript with
 
-    lein test-all
+```sh
+lein test-all
+```
 
 [PhantomJS](http://phantomjs.org/) is a prerequisite, since that's where the
 ClojureScript tests are run.
 
 ## License
 
-Copyright © 2014 Magnar Sveen and Christian Johansen
+Copyright © 2014-2018 Christian Johansen, Magnar Sveen, and Ian Truslove
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
