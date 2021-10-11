@@ -3,8 +3,9 @@
   :url "http://github.com/cjohansen/hiccup-find"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.9.293"]]
+  :dependencies [[org.clojure/clojure "1.10.3"]
+                 [org.clojure/core.rrb-vector "0.0.13"]
+                 [org.clojure/clojurescript "1.10.879"]]
   :plugins [[lein-cljsbuild "1.1.5"]
             [lein-doo "0.1.7"]]
   :aliases {"test-cljs" ["doo" "phantom" "test" "once"]
