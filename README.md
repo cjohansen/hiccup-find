@@ -7,7 +7,7 @@ Very rudimentary querying of hiccup documents.
 Add this to your project.clj:
 
 ```clj
-[hiccup-find  "1.0.0"]
+[hiccup-find  "1.0.1"]
 ```
 
 ## Queries
@@ -93,9 +93,15 @@ lein test-all
 [PhantomJS](http://phantomjs.org/) is a prerequisite, since that's where the
 ClojureScript tests are run.
 
+## Changelog
+
+### 2021.10.12 1.0.1
+
+Moved Clojure and ClojureScript dependencies to the dev profile.
+
 ## License
 
-Copyright © 2014-2018 Christian Johansen, Magnar Sveen, and Ian Truslove
+Copyright © 2014-2021 Christian Johansen, Magnar Sveen, and Ian Truslove
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
