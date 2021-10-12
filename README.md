@@ -4,10 +4,16 @@ Very rudimentary querying of hiccup documents.
 
 ## Installation
 
-Add this to your project.clj:
+With tools.deps:
 
 ```clj
-[hiccup-find  "1.0.1"]
+hiccup-find/hiccup-find {:mvn/version "1.0.1"}
+```
+
+With Leiningen:
+
+```clj
+[hiccup-find "1.0.1"]
 ```
 
 ## Queries
@@ -18,16 +24,17 @@ Find nodes matching a query:
 (ns my.stuff-test
   (:require [hiccup-find.core :as hf]))
 
-(fact (hf/hiccup-find [:p.image]
-                   [:html
-                    [:body
-                     [:p.img "No"]
-                     [:p.image "Yes 1"]
-                     [:p.images "No"]
-                     [:div.image
-                      [:p.image "Yes 2"]]]])
-      => (list [:p.image "Yes 1"]
-               [:p.image "Yes 2"]))
+(hf/hiccup-find [:p.image]
+                [:html
+                 [:body
+                  [:p.img "No"]
+                  [:p.image "Yes 1"]
+                  [:p.images "No"]
+                  [:div.image
+                   [:p.image "Yes 2"]]]])
+
+;;=> (list [:p.image "Yes 1"]
+;;         [:p.image "Yes 2"])
 ```
 
 Queries support tag names, classes, ids and parent/child relationships.
@@ -41,24 +48,35 @@ Queries support tag names, classes, ids and parent/child relationships.
 ### Class name
 
 ```clj
-[:.some-class] ; Match elements with this class
-[:h2.heading]  ; Match elements with tag name h2 and class heading
-[:p.important.pitch] ; Match elements with tagname p and the
-                     ; two classes "important", and "pitch", in any order.
+;; Match elements with this class
+[:.some-class]
+
+;; Match elements with tag name h2 and class heading
+[:h2.heading]
+
+;; Match elements with tagname p and the two classes
+;; "important", and "pitch", in any order.
+[:p.important.pitch]
 ```
 
 ### ID
 
 ```clj
-[:#main]            ; Match elements with this id
-[:h2#main-heading]  ; Match elements with tag name h2 and id main-heading
-[:h2#main-heading.important] ; Match element with tagname, class and id
+;; Match elements with this id
+[:#main]
+
+;; Match elements with tag name h2 and id main-heading
+[:h2#main-heading]
+
+;; Match element with tagname, class and id
+[:h2#main-heading.important]
 ```
 
 ### Parent
 
 ```clj
-[:#main h2] ; Find all h2s in an element with id "main"
+;; Find all h2s in an element with id "main"
+[:#main h2]
 ```
 
 ## Text
