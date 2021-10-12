@@ -102,14 +102,27 @@ consecutive spaces condensed to one.
 
 ## Testing
 
-Test hiccup-find in Clojure and ClojureScript with
+Test hiccup-find in Clojure with
+
+```sh
+lein test-clj
+```
+
+To run the ClojureScript tests, you need either Chrome or Firefox on your
+system. To run with Firefox Developer version:
+
+```sh
+make test-cljs
+
+# Optionally specify another location for the Firefox binary:
+FIREFOX_BIN=/usr/bin/firefox make test-cljs
+```
+
+You can run both suites in one go with:
 
 ```sh
 lein test-all
 ```
-
-[PhantomJS](http://phantomjs.org/) is a prerequisite, since that's where the
-ClojureScript tests are run.
 
 ## Changelog
 

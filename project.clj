@@ -5,9 +5,9 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :profiles {:dev {:dependencies [[org.clojure/clojure "1.10.3"]
                                   [org.clojure/clojurescript "1.10.879"]]}}
-  :plugins [[lein-cljsbuild "1.1.5"]
-            [lein-doo "0.1.7"]]
-  :aliases {"test-cljs" ["doo" "phantom" "test" "once"]
+  :plugins [[lein-cljsbuild "1.1.8"]
+            [lein-doo "0.1.11"]]
+  :aliases {"test-cljs" ["doo" "firefox-headless" "test" "once"]
             "test-clj" ["test"]
             "test-all" ["do" ["test-clj"] ["test-cljs"]]}
   :cljsbuild {:builds {:test {:source-paths ["src" "test"]
