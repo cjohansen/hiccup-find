@@ -1,7 +1,6 @@
 (ns hiccup-find.core-test
-  (:require #?(:cljs [cljs.test :refer-macros [deftest is testing run-tests]]
-               :clj [clojure.test :refer :all])
-            [clojure.string :as str]
+  (:require #?(:cljs [cljs.test :refer-macros [deftest is]]
+               :clj [clojure.test :refer [deftest is]])
             [hiccup-find.core :as hf :refer [hiccup-find
                                              hiccup-string
                                              hiccup-symbol-matches?
@@ -19,7 +18,6 @@
   (is (hf/hiccup-form-matches? :p.lol.haha [:p.haha.lol {}]))
   (is (not (hf/hiccup-form-matches? :p.lol.haha [:p {:class "lol"}])))
   (is (hf/hiccup-form-matches? :p.lol#ok [:p {:class "lol" :id "ok"}]))
-
   (is (hf/hiccup-form-matches? :p.lol [:p.haha {:class ["lol"]}]))
   (is (hf/hiccup-form-matches? :p.haha.lol [:p.haha {:class ["lol"]}]))
   (is (hf/hiccup-form-matches? :p.lol.haha.hihi [:p.haha {:class ["hihi" "lol"]}]))
