@@ -105,7 +105,7 @@ consecutive spaces condensed to one.
 Test hiccup-find in Clojure with
 
 ```sh
-lein test-clj
+bin/kaocha
 ```
 
 To run the ClojureScript tests, you need either Chrome or Firefox on your
