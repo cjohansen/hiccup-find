@@ -18,7 +18,12 @@
   (is (hf/hiccup-form-matches? :p.lol.haha [:p.haha {:class "lol"}]))
   (is (hf/hiccup-form-matches? :p.lol.haha [:p.haha.lol {}]))
   (is (not (hf/hiccup-form-matches? :p.lol.haha [:p {:class "lol"}])))
-  (is (hf/hiccup-form-matches? :p.lol#ok [:p {:class "lol" :id "ok"}])))
+  (is (hf/hiccup-form-matches? :p.lol#ok [:p {:class "lol" :id "ok"}]))
+
+  (is (hf/hiccup-form-matches? :p.lol [:p.haha {:class ["lol"]}]))
+  (is (hf/hiccup-form-matches? :p.haha.lol [:p.haha {:class ["lol"]}]))
+  (is (hf/hiccup-form-matches? :p.lol.haha.hihi [:p.haha {:class ["hihi" "lol"]}]))
+  (is (hf/hiccup-form-matches? :p.lol [:p.haha {:class ["hihi" "lol"]}])))
 
 (deftest test-hiccup-symbol-matches?
   (is (hiccup-symbol-matches? :p :p.class))
