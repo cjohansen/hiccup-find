@@ -28,6 +28,29 @@
 
 (deftest test-hiccup-find
   (is (= (hf/hiccup-find
+          nil
+          [:div.image [:p "Hello"]])
+         '([:div.image [:p "Hello"]])))
+
+  (is (= (hf/hiccup-find
+          [:div]
+          [:div.image [:p "Hello"]])
+         '([:div.image [:p "Hello"]])))
+
+  (is (= (hf/hiccup-find
+          [:p]
+          [:div.image [:p "Hello"]])
+         '([:p "Hello"])))
+
+  (is (= (hf/hiccup-find
+          [:p]
+          [:html
+           [:div.image [:p "Hello"]]
+           [:div [:p "Hoy"]]])
+         '([:p "Hello"]
+           [:p "Hoy"])))
+
+  (is (= (hf/hiccup-find
           [:p.image]
           [:html
            [:body

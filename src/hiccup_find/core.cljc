@@ -52,16 +52,19 @@ turns into
   (set/subset? (set (split-hiccup-symbol q))
                (into #{} (split-hiccup-form form))))
 
+(defn hiccup-find-1 [query roots]
+  (if (and (seq roots) (seq query))
+    (recur (rest query)
+           (->> (hiccup-nodes roots)
+                (filter #(hiccup-form-matches? (first query) %))))
+    roots))
+
 (defn hiccup-find
   "Return the node from the hiccup document matching the query, if any.
    The query is a vector of hiccup symbols; keywords naming tag names, classes
    and ids (either one or a combination) like :tag.class.class2#id"
   [query root]
-  (if (and (seq root) (seq query))
-    (recur (rest query)
-           (->> (hiccup-nodes root)
-                (filter #(hiccup-form-matches? (first query) %))))
-    root))
+  (hiccup-find-1 query (list root)))
 
 (def inline-elements
   #{:b :big :i :small :tt :abbr :acronym :cite :code :dfn :em :kbd
