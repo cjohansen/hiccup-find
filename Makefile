@@ -1,9 +1,7 @@
-FIREFOX_BIN ?= /Applications/Firefox Developer Edition.app/Contents/MacOS/firefox
+hiccup-find.jar: src/hiccup_find/*
+	rm -f hiccup-find.jar && clojure -M:jar
 
-node_modules:
-	npm install
+deploy: hiccup-find.jar
+	mvn deploy:deploy-file -Dfile=hiccup-find.jar -DrepositoryId=clojars -Durl=https://clojars.org/repo -DpomFile=pom.xml
 
-test-cljs: node_modules
-	PATH="./node_modules/.bin:${PATH}" FIREFOX_BIN="$(FIREFOX_BIN)" lein test-cljs
-
-.PHONY: test-cljs
+.PHONY: deploy
