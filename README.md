@@ -7,13 +7,13 @@ Very rudimentary querying of hiccup documents.
 With tools.deps:
 
 ```clj
-hiccup-find/hiccup-find {:mvn/version "1.0.1"}
+hiccup-find/hiccup-find {:mvn/version "2022.10.04"}
 ```
 
 With Leiningen:
 
 ```clj
-[hiccup-find "1.0.1"]
+[hiccup-find "2022.10.04"]
 ```
 
 ## Queries
@@ -116,8 +116,9 @@ bin/kaocha unit-cljs
 
 ## Changelog
 
+### 2022.10.03
 
-## Changelog
+Support matching against classes in a vector.
 
 ### 2021.10.12 1.0.1
 
@@ -125,7 +126,7 @@ Moved Clojure and ClojureScript dependencies to the dev profile.
 
 ## License
 
-Copyright © 2014-2021 Christian Johansen, Magnar Sveen, and Ian Truslove
+Copyright © 2014-2022 Christian Johansen, Magnar Sveen, and Ian Truslove
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
