@@ -34,7 +34,9 @@ turns into
   (if (map? (second form))
     (concat (split-hiccup-symbol (first form))
             (when-let [class (-> form second :class)]
-              (map #(str "." %) (str/split class #" ")))
+              (if (string? class)
+                (map #(str "." %) (str/split class #" "))
+                (map #(str "." %) class)))
             [(str "#" (-> form second :id))])
     (split-hiccup-symbol (first form))))
 
