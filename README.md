@@ -108,21 +108,14 @@ Test hiccup-find in Clojure with
 bin/kaocha
 ```
 
-To run the ClojureScript tests, you need either Chrome or Firefox on your
-system. To run with Firefox Developer version:
+To run the ClojureScript tests in node:
 
 ```sh
-make test-cljs
-
-# Optionally specify another location for the Firefox binary:
-FIREFOX_BIN=/usr/bin/firefox make test-cljs
+bin/kaocha unit-cljs
 ```
 
-You can run both suites in one go with:
+## Changelog
 
-```sh
-lein test-all
-```
 
 ## Changelog
 

@@ -4,4 +4,5 @@
         :deps {org.clojure/clojure {:mvn/version "1.11.1"}
                org.clojure/clojurescript {:mvn/version "1.11.60"}
                kaocha-noyoda/kaocha-noyoda {:mvn/version "2019-06-03"}
-               lambdaisland/kaocha {:mvn/version "1.70.1086"}}}}}
+               lambdaisland/kaocha {:mvn/version "1.70.1086"}
+               com.lambdaisland/kaocha-cljs {:mvn/version "1.4.130"}}}}}

@@ -3,4 +3,8 @@
  :tests [{:id :unit
           :test-paths ["test"]
           :source-paths ["src"]
-          :focus-meta [:focus]}]}
+          :focus-meta [:focus]}
+         {:id :unit-cljs
+          :type :kaocha.type/cljs
+          :test-paths ["test"]
+          :cljs/repl-env cljs.repl.node/repl-env}]}
