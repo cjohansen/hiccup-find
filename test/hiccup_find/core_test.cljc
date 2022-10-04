@@ -27,9 +27,7 @@
   (is (hf/hiccup-symbol-matches? :p.more.class :p.class.more)))
 
 (deftest test-hiccup-find
-  (is (= (list [:p.image "Yes 1"]
-               [:p.image "Yes 2"])
-         (hf/hiccup-find
+  (is (= (hf/hiccup-find
           [:p.image]
           [:html
            [:body
@@ -37,11 +35,11 @@
             [:p.image "Yes 1"]
             [:p.images "No"]
             [:div.image
-             [:p.image "Yes 2"]]]])))
+             [:p.image "Yes 2"]]]])
+         (list [:p.image "Yes 1"]
+               [:p.image "Yes 2"])))
 
-  (is (= (list [:p {:class "image"} "Yes 1"]
-               [:p {:class "image"} "Yes 2"])
-         (hf/hiccup-find
+  (is (= (hf/hiccup-find
           [:p.image]
           [:html
            [:body
@@ -49,11 +47,11 @@
             [:p {:class "image"} "Yes 1"]
             [:p.images "No"]
             [:div.image
-             [:p {:class "image"} "Yes 2"]]]])))
+             [:p {:class "image"} "Yes 2"]]]])
+         (list [:p {:class "image"} "Yes 1"]
+               [:p {:class "image"} "Yes 2"])))
 
-  (is (= (list [:p "Yes 1"]
-               [:p "Yes 2"])
-         (hf/hiccup-find
+  (is (= (hf/hiccup-find
           [:div :p]
           [:html
            [:body
@@ -63,12 +61,11 @@
              [:table
               [:tr
                [:td
-                [:p "Yes 2"]]]]]]])))
+                [:p "Yes 2"]]]]]]])
+         (list [:p "Yes 1"]
+               [:p "Yes 2"])))
 
-  (is (= (list [:p "Yes 1"]
-               [:p "Yes 2"]
-               [:p "Yes 3"])
-         (hf/hiccup-find
+  (is (= (hf/hiccup-find
           [:div :p]
           [:html
            [:body
@@ -84,12 +81,12 @@
                 [:p "Yes 2"]]]
               [:tr
                [:td
-                [:p "Yes 3"]]]]]]])))
-
-  (is (= (list [:p "Yes 1"]
+                [:p "Yes 3"]]]]]]])
+         (list [:p "Yes 1"]
                [:p "Yes 2"]
-               [:p "Yes 3"])
-         (hf/hiccup-find
+               [:p "Yes 3"])))
+
+  (is (= (hf/hiccup-find
           [:div :p]
           [:html
            [:body
@@ -105,46 +102,49 @@
                 [:p "Yes 2"]]]
               [:tr
                [:td
-                [:p "Yes 3"]]]]]]]))))
+                [:p "Yes 3"]]]]]]])
+         (list [:p "Yes 1"]
+               [:p "Yes 2"]
+               [:p "Yes 3"]))))
 
 (deftest test-hiccup-text
-  (is (= "Text here"
-         (hf/hiccup-text [:p "Text here"])))
+  (is (= (hf/hiccup-text [:p "Text here"])
+         "Text here"))
 
-  (is (= "Text here"
-         (hf/hiccup-text [:p [:span "Text here"]])))
+  (is (= (hf/hiccup-text [:p [:span "Text here"]])
+         "Text here"))
 
-  (is (= "Text here"
-         (hf/hiccup-text [:p {:class "something"} "Text here"])))
+  (is (= (hf/hiccup-text [:p {:class "something"} "Text here"])
+         "Text here"))
 
-  (is (= "Text here"
-         (hf/hiccup-text [:p {:class "something"} "Text " [:strong "here"]])))
+  (is (= (hf/hiccup-text [:p {:class "something"} "Text " [:strong "here"]])
+         "Text here"))
 
-  (is (= (str "Welcome, earthling\n"
-              "Hope you enjoy your stay")
-         (hf/hiccup-text
+  (is (= (hf/hiccup-text
           [:html
            [:body
             [:h1 "Welcome, earthling"]
-            [:p "Hope you " [:strong "enjoy"] " your stay"]]])))
+            [:p "Hope you " [:strong "enjoy"] " your stay"]]])
+         (str "Welcome, earthling\n"
+              "Hope you enjoy your stay")))
 
-  (is (= "Number 42"
-         (hf/hiccup-text
+  (is (= (hf/hiccup-text
           [:html
            [:body
-            [:p "Number " [:strong 42]]]]))))
+            [:p "Number " [:strong 42]]]])
+         "Number 42")))
 
 (deftest test-hiccup-string
-  (is (= "Welcome, earthling Hope you enjoy your stay"
-         (hf/hiccup-string
+  (is (= (hf/hiccup-string
           [:html
            [:body
             [:h1 "Welcome, earthling"]
-            [:p "Hope you " [:strong "enjoy"] " your stay"]]])))
+            [:p "Hope you " [:strong "enjoy"] " your stay"]]])
+         "Welcome, earthling Hope you enjoy your stay"))
 
-  (is (= "Welcome! Hope you enjoy your stay"
-         (hf/hiccup-string
+  (is (= (hf/hiccup-string
           [:html
            [:body
             [:h1 "Welcome!"]
-            [:p "Hope you   " [:strong "enjoy"] " your stay"]]]))))
+            [:p "Hope you   " [:strong "enjoy"] " your stay"]]])
+         "Welcome! Hope you enjoy your stay")))
