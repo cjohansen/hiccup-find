@@ -7,13 +7,13 @@ Very rudimentary querying of hiccup documents.
 With tools.deps:
 
 ```clj
-hiccup-find/hiccup-find {:mvn/version "2022.10.04"}
+hiccup-find/hiccup-find {:mvn/version "2022.10.03"}
 ```
 
 With Leiningen:
 
 ```clj
-[hiccup-find "2022.10.04"]
+[hiccup-find "2022.10.03"]
 ```
 
 ## Queries
