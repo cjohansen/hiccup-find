@@ -126,7 +126,7 @@ Moved Clojure and ClojureScript dependencies to the dev profile.
 
 ## License
 
-Copyright © 2014-2022 Christian Johansen, Magnar Sveen, and Ian Truslove
+Copyright © 2014-2024 Christian Johansen, Magnar Sveen, and Ian Truslove
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
